@@ -1,8 +1,46 @@
 def tamilwebscrap(url):
+    import requests
+    from bs4 import BeautifulSoup
+    import tamil
+    import re
+    reqs = requests.get(url)
+    soup = BeautifulSoup(reqs.text, 'html.parser')
+     
+    urls = []
+    # extract url from parent url
+    for link in soup.find_all('a'):
+        urls.append(link.get('href'))
+    # function for filter url
+    def extract_url(s):
+        return re.findall(r'(https?://\S+)', s)
+    # filter url step 1
+    extract1=[]
+    for g in urls:
+        extract1.append(extract_url(str(g)))
+    # merge sublist step 1
+    allurl = []
+    for i in extract1:
+        allurl += i
+    # extract url from child
+    finalurl=[]
+    for i in allurl:
+        reqs = requests.get(i)
+        soup = BeautifulSoup(reqs.text, 'html.parser')
+         
+        urls2 = []
+
+        for link in soup.find_all('a'):
+            urls2.append(link.get('href'))
+        finalurl.extend(urls2)
+    #filter url step 2
+    extract2=[]
+    for g1 in finalurl:
+        extract2.append(extract_url(str(g1)))
+    # merge sub list 2
+    allur2 = []
+    for i in extract2:
+        allur2 += i
     def webscraping(url): 
-        import requests
-        from bs4 import BeautifulSoup
-        import tamil
         # read url
         html = requests.get(url).content
         soup = BeautifulSoup(html, features="html.parser")  
@@ -15,16 +53,17 @@ def tamilwebscrap(url):
             frequency[word] = 1 + frequency.get(word,0)
         return list(frequency)
     # run multiple url's
+    v = allur2[2:100]
     y = []
-    for x in url:
+    for x in v:
         y.extend(webscraping(x))
-        y = list( dict.fromkeys(y) )
-       #print(y)
+        y = list(dict.fromkeys(y))
     total = []
     for i in [y]:
         total += i
     return total
-#call function
-url = list(input('enter\n'))
+# call function
+url = (input('enter\n'))
 x = tamilwebscrap(url)
 print(x)
+print(len(x))

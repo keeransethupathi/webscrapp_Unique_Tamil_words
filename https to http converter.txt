@@ -1,6 +1,0 @@
-urls=[]
-for string in urls_r:
-    new_string = string.replace("https", "http")
-    urls.append(new_string)
-#print(urls)
-print(len(urls))

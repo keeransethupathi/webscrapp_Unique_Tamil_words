@@ -1,24 +1,30 @@
-import requests
-from bs4 import BeautifulSoup
-import tamil
-
-def webscraping(url):   
+def tamilwebscrap(url):
+    def webscraping(url): 
+        import requests
+        from bs4 import BeautifulSoup
+        import tamil
+        # read url
         html = requests.get(url).content
-        soup = BeautifulSoup(html, features="html.parser")       
+        soup = BeautifulSoup(html, features="html.parser")  
+        # get words
         text = soup.get_text()
+        # filter tamil words
         taletters = tamil.utf8.get_letters(text)
         frequency = {}
         for x,word in enumerate(tamil.utf8.get_tamil_words(taletters)):
             frequency[word] = 1 + frequency.get(word,0)
         return list(frequency)
-
-y = []
-for x in urls:
-    y.extend(webscraping(x))
-    y = list( dict.fromkeys(y) )
-   #print(y)
-total = []
-for i in [y]:
-    total += i
-print (total)
-print(len(total))
+    # run multiple url's
+    y = []
+    for x in url:
+        y.extend(webscraping(x))
+        y = list( dict.fromkeys(y) )
+       #print(y)
+    total = []
+    for i in [y]:
+        total += i
+    return total
+#call function
+url = list(input('enter\n'))
+x = tamilwebscrap(url)
+print(x)

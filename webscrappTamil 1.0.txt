@@ -52,8 +52,8 @@ def tamilwebscrap(url):
         for x,word in enumerate(tamil.utf8.get_tamil_words(taletters)):
             frequency[word] = 1 + frequency.get(word,0)
         return list(frequency)
-    # run multiple url's
-    v = allur2[2:100]
+    # run multiple url's first 1000 url only
+    v = allur2[1:1000]
     y = []
     for x in v:
         y.extend(webscraping(x))
